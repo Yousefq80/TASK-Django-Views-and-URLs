@@ -5,8 +5,24 @@ from .models import Product
 
 # Create your views here.
 def get_home(request):
-    return HttpResponse(f"<h1>Welcome</h1>")
+    return render(request,"home.html")
 
 def get_product(request,product_id):
-    p= Product.objects.get(id=product_id)
-    return HttpResponse(p)
+    product= Product.objects.get(id=product_id)
+   
+    context = {"product":
+      {
+        "name":product.name,
+    
+    "price":product.price
+      }
+              }
+    return render(request,"product-detail.html",context)
+
+def get_products(request):
+    products= Product.objects.all()
+    list=[]
+    for i in products:
+        list.append({"name":i.name,"price":i.price})
+    context={"products":list}
+    return render(request,"product-list.html",context)
